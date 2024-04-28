@@ -102,6 +102,14 @@ async function run() {
       const result = await touristsCollection.updateOne(filter, updateSpot);
       res.send(result);
     });
+
+    // Delete Spot
+    app.delete("/spot-delete/:id", async (req, res) => {
+      const { id } = req.params;
+      const query = { _id: new ObjectId(id) };
+      const result = await touristsCollection.deleteOne(query);
+      res.send(result);
+    });
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     console.log(

@@ -70,6 +70,20 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+
+    // Get Single User
+    app.get("/update-my-spot-list/:id", async (req, res) => {
+      const { id } = req.params;
+      const query = { _id: new ObjectId(id) };
+      const result = await touristsCollection.findOne(query);
+      res.send(result);
+    });
+
+    // Update my Spot List
+    // app.patch("/update-my-spot-list/:id", async (req, res) => {
+    //   const { id } = req.params;
+    //   console.log(id);
+    // });
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     console.log(

@@ -80,10 +80,28 @@ async function run() {
     });
 
     // Update my Spot List
-    // app.patch("/update-my-spot-list/:id", async (req, res) => {
-    //   const { id } = req.params;
-    //   console.log(id);
-    // });
+    app.patch("/update-my-spot-list/:id", async (req, res) => {
+      const { id } = req.params;
+      const spotInfo = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const updateSpot = {
+        $set: {
+          touristsSpotName: spotInfo.touristsSpotName,
+          photoURL: spotInfo.photoURL,
+          countryName: spotInfo.countryName,
+          location: spotInfo.location,
+          averageCost: spotInfo.averageCost,
+          seasonality: spotInfo.seasonality,
+          travelTime: spotInfo.travelTime,
+          totalVisitorsPerYear: spotInfo.totalVisitorsPerYear,
+          shortDescription: spotInfo.shortDescription,
+        },
+      };
+
+      // Update Now
+      const result = await touristsCollection.updateOne(filter, updateSpot);
+      res.send(result);
+    });
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     console.log(

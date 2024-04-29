@@ -90,9 +90,10 @@ async function run() {
     });
 
     // Get User Added Spot List
-    app.get("/user-added-spot-list/:email", async (req, res) => {
-      const { email } = req.params;
-      const query = { userEmail: email };
+    app.get("/user-added-spot-list/:username", async (req, res) => {
+      const { username } = req.params;
+      console.log(username);
+      const query = { userName: username };
       const cursor = touristsCollection.find(query);
       const result = await cursor.toArray();
       res.send(result);

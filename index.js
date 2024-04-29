@@ -31,9 +31,6 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
-    // await client.connect();
-
     // DB and Collection
     const touristsCollection = client.db("touristsSpotDB").collection("spots");
     const touristsCountryCollection = client
@@ -136,7 +133,7 @@ async function run() {
       res.send(result);
     });
 
-    // Sorting Avarage Cost
+    // Sorting Average Cost
     app.get("/sorting/:cost", async (req, res) => {
       const { cost } = req.params;
       let convertCost = parseInt(cost);

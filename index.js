@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://tourism-2d1ca.web.app"],
   })
 );
 
@@ -38,11 +38,24 @@ async function run() {
 
     // DB and Collection
     const touristsCollection = client.db("touristsSpotDB").collection("spots");
+    const touristsCountryCollection = client
+      .db("touristsSpotDB")
+      .collection("country");
 
     // Create Spot
     app.post("/spot", async (req, res) => {
       const spotInfo = req.body;
+      const existCountry = { countryName: spotInfo.countryName };
 
+      const checkCountry = await touristsCountryCollection.findOne(
+        existCountry
+      );
+      // Validate
+      if (!checkCountry) {
+        const countryresult = await touristsCountryCollection.insertOne(
+          spotInfo
+        );
+      }
       const result = await touristsCollection.insertOne(spotInfo);
       res.send(result);
     });
@@ -50,6 +63,13 @@ async function run() {
     // Get All Spot
     app.get("/spot", async (req, res) => {
       const cursor = touristsCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // Get Countries
+    app.get("/counties", async (req, res) => {
+      const cursor = touristsCountryCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     });

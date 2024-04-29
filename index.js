@@ -19,8 +19,6 @@ app.use(
  */
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.apymwsq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-// const uri =
-//   "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -92,7 +90,6 @@ async function run() {
     // Get User Added Spot List
     app.get("/user-added-spot-list/:username", async (req, res) => {
       const { username } = req.params;
-      console.log(username);
       const query = { userName: username };
       const cursor = touristsCollection.find(query);
       const result = await cursor.toArray();
@@ -136,6 +133,19 @@ async function run() {
       const { id } = req.params;
       const query = { _id: new ObjectId(id) };
       const result = await touristsCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // Sorting Avarage Cost
+    app.get("/sorting/:cost", async (req, res) => {
+      const { cost } = req.params;
+      let convertCost = parseInt(cost);
+      // Get Db
+      const query = { averageCost: { $lt: convertCost } };
+
+      const cursor = touristsCollection.find(query);
+      const result = await cursor.toArray();
+
       res.send(result);
     });
     // Send a ping to confirm a successful connection

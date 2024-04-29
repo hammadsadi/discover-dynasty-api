@@ -73,7 +73,14 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
-
+    // Get Related Countries
+    app.get("/counties/:country", async (req, res) => {
+      const { country } = req.params;
+      const filter = { countryName: country };
+      const cursor = touristsCollection.find(filter);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
     // Get Single Spot
     app.get("/spot/:id", async (req, res) => {
       const { id } = req.params;
